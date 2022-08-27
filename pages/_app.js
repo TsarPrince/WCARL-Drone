@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import Head from 'next/head'
 import '../styles/globals.css'
+import '../styles/checkMyDevice.css'
+
 import 'bootstrap/dist/css/bootstrap.css'       // bootstrap css
 import Navbar from '../components/Navbar'
 
