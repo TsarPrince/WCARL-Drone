@@ -36,21 +36,44 @@ export default function CheckDevice() {
       });
     }
   }, []);
+
+  const sensors = [
+    {
+      heading: "Camera Enabled",
+      description: "Checking if Camera of the Phone working properly...",
+      enabled: cameraStat
+    },
+    {
+      heading: "Network Enabled",
+      description: "Checking if Network is established...",
+      enabled: true
+    },
+    {
+      heading: "Accelerometer Enabled",
+      description: "Checking if we have access to Accelerometer of the device...",
+      enabled: accelerometerStat
+    },
+    {
+      heading: "Storage Access Granted",
+      description: "Checking if we can use the storage of phone...",
+      enabled: true
+    },
+    {
+      heading: "Gyroscope Enabled",
+      description: "Checking the Gyroscope",
+      enabled: gyroscopeStat
+    },
+    {
+      heading: "Proximity Sensor Enabled",
+      description: "Checking the Proximity Sensor",
+      enabled: false
+    },
+
+  ]
   return (
-    <>
-      <h2>Your device supports: </h2>
-      <ul>
-        <li>Camera: {cameraStat ? "true" : "false"}</li>
-        <li>
-          Accelerometer: {accelerometerStat ? accelerometerStat : "false"}
-        </li>
-        <li>Gyroscope: {gyroscopeStat ? gyroscopeStat : "false"}</li>
-      </ul>
 
       <div className="container-xxl bg-white p-0">
         
-
-
         <div className="container-xxl py-5">
             <div className="container">
                 <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
@@ -58,90 +81,28 @@ export default function CheckDevice() {
                     <h1 className="mb-5">Checking The <span className="text-primary text-uppercase">Sensors</span></h1>
                 </div>
                 <div className="row g-4">
-                    <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                        <div className="service-item rounded" href="">
+                  {
+                    sensors.map(sensor => (
+                    <div key={sensor.heading} className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                        <div className={`service-item text-white rounded ${sensor.enabled ? 'service-item-enabled' : 'service-item-disabled'}`}>
                             <div>
-                                <div >
-
-                                    <input type="checkbox"/>
+                                <div className="service-item-svg">
+                                    {
+                                      (sensor.enabled
+                                      ? <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 448 512"><path d="M438.6 105.4C451.1 117.9 451.1 138.1 438.6 150.6L182.6 406.6C170.1 419.1 149.9 419.1 137.4 406.6L9.372 278.6C-3.124 266.1-3.124 245.9 9.372 233.4C21.87 220.9 42.13 220.9 54.63 233.4L159.1 338.7L393.4 105.4C405.9 92.88 426.1 92.88 438.6 105.4H438.6z"/></svg>
+                                      : <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 320 512"><path d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>)
+                                    }
                                 </div>
                             </div>
-                            <h5 className="mb-3">Camera Enabled</h5>
-                            <p className="text-body mb-0">Checking if Camera of the Phone working properly...</p>
+                            <h5 className="mt-4">{sensor.heading}</h5>
+                            <p className="mb-0">{sensor.description}</p>
                         </div>
                     </div>
-                    <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
-                        <div className="service-item rounded" href="">
-                            <div>
-                                <div >
-
-                                    <input type="checkbox"/>
-                                </div>
-                            </div>
-                            <h5 className="mb-3">Network Enabled</h5>
-                            <p className="text-body mb-0">Checking if Network is established...</p>
-                        </div>
-                    </div>
-                    <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                        <div className="service-item rounded" href="">
-                            <div >
-                                <div >
-                                    <input type="checkbox"/>
-
-                                </div>
-                            </div>
-                            <h5 className="mb-3">Storage Access Granted</h5>
-                            <p className="text-body mb-0">Checking if we can use the storage of phone...</p>
-                        </div>
-                    </div>
-                    <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.4s">
-                        <div className="service-item rounded" href="">
-                            <div >
-                                <div >
-                                    <input type="checkbox"/>
-
-                                </div>
-                            </div>
-                            <h5 className="mb-3">Gyroscope Enabled</h5>
-                            <p className="text-body mb-0">Checking the Gyroscope...</p>
-                        </div>
-                    </div>
-                    <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                        <div className="service-item rounded" href="">
-                            <div >
-                                <div >
-                                    <input type="checkbox"/>
-
-                                </div>
-                            </div>
-                            <h5 className="mb-3">Proximity Sensor Enabled</h5>
-                            <p className="text-body mb-0">Checking the Proximity Sensor...</p>
-                        </div>
-                    </div>
-                    <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
-                        <div className="service-item rounded" href="">
-                            <div >
-                                <div >
-                                    <input type="checkbox"/>
-
-                                </div>
-                            </div>
-                            <h5 className="mb-3">All Sensors Enabled</h5>
-                            <p className="text-body mb-0">Checking if all the sensors are working properly...</p>
-                        </div>
-                    </div>
+                    ))
+                  }
                 </div>
             </div>
         </div>
-        
-
-
-        
-
-
-
-        <div href="#" className="btn btn-lg btn-primary btn-lg-square back-to-top"><i className="bi bi-arrow-up"></i></div>
     </div>
-    </>
   );
 }
