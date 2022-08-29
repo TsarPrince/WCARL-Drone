@@ -71,6 +71,15 @@ export default function CheckDevice() {
 
   ]
   return (
+    <>
+      <h2>Your device supports: </h2>
+      <ul>
+        <li>Camera: {cameraStat ? "true" : "false"}</li>
+        <li>
+          Accelerometer: {accelerometerStat ? accelerometerStat : "false"}
+        </li>
+        <li>Gyroscope: {gyroscopeStat ? gyroscopeStat : "false"}</li>
+      </ul>
 
       <div className="container-xxl bg-white p-0">
         
@@ -104,5 +113,6 @@ export default function CheckDevice() {
             </div>
         </div>
     </div>
+    </>
   );
 }
