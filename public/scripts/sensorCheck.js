@@ -170,7 +170,7 @@ export function checkSensors() {
   // accelerometer
   let accelerometer = null;
   try {
-    accelerometer = new Accelerometer({ referenceFrame: "device" });
+    accelerometer = new LinearAccelerationSensor({ referenceFrame: "device" });
     accelerometer.addEventListener("error", (event) => {
       // Handle runtime errors.
       if (event.error.name === "NotAllowedError") {
