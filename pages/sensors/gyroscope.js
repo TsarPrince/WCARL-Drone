@@ -77,8 +77,8 @@ const GyroscopeComponent = () => {
                 display: true,
                 text: 'Value'
               },
-              suggestedMin: -10,
-              suggestedMax: 10
+              suggestedMin: -90,
+              suggestedMax: 90
             }
           },
           elements: {
@@ -130,9 +130,9 @@ const GyroscopeComponent = () => {
           lineChart.data.datasets[1].data.splice(0, 1);
           lineChart.data.datasets[2].data.splice(0, 1);
         }
-        lineChart.data.datasets[0].data.push(gyroscope.x);
-        lineChart.data.datasets[1].data.push(gyroscope.y);
-        lineChart.data.datasets[2].data.push(gyroscope.z);
+        lineChart.data.datasets[0].data.push(gyroscope.x * 180 / Math.PI);
+        lineChart.data.datasets[1].data.push(gyroscope.y * 180 / Math.PI);
+        lineChart.data.datasets[2].data.push(gyroscope.z * 180 / Math.PI);
 
         counter++;
         lineChart.update();
