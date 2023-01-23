@@ -1,0 +1,125 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+    Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none !important;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* check-my-device */
+.fw-medium {
+  font-weight: 500 !important;
+}
+
+.fw-semi-bold {
+  font-weight: 600 !important;
+}
+
+.service-item {
+  height: 320px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  background: #ffffff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  transition: 0.5s;
+}
+
+.service-item-enabled {
+  background: #3e8bff;
+}
+
+.service-item-disabled {
+  background: #f9395f;
+}
+
+@media screen and (max-width: 768px) {
+  .service-item {
+    height: auto;
+  }
+}
+
+.service-item-svg {
+  width: 45px;
+  height: 45px;
+  display: inline-block;
+  color: #0000005d;
+}
+
+.service-item .service-icon {
+  margin: 0 auto 30px auto;
+  width: 65px;
+  height: 65px;
+  transition: 0.5s;
+}
+
+.vertical_center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.spinner {
+  width: auto;
+  position: relative;
+  margin: 100px auto;
+  text-align: center;
+}
+
+.loader_title {
+  font-size: 30px;
+  font-weight: 600;
+  margin: 0;
+  padding: 10px;
+  gap: 10px;
+}
+
+#myChart {
+  width: 500px;
+  height: 500px;
+  margin-left: 20vw;
+}
+
+@media (max-width: 767px) {
+  #myChart {
+    margin-left: 0;
+    width: 350px;
+    height: 350px;
+  }
+
+  .loader_title {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0;
+    padding: 10px;
+    gap: 10px;
+  }
+}
+
+/* Stream page */
+#video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 300px);
+  grid-auto-rows: 300px;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

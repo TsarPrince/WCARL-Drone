@@ -1,4 +1,9 @@
 import React, { useEffect } from 'react'
+import Layout from "../../components/layout/Layout.component"
+import Loader from "../../components/Loader";
+import { checkSensors, checkMediaSupport } from "../../utils/check-sensors.js";
+import { Round } from "../../utils/utils.js";
+import {Link} from "react-router-dom";
 import { Chart, registerables } from 'chart.js';
 
 const GyroscopeComponent = () => {
@@ -122,7 +127,7 @@ const GyroscopeComponent = () => {
 
       let counter = 0;
       gyroscope.onreading = (e) => {
-        
+
         if (counter > DATA_COUNT) {
           lineChart.data.labels.splice(0, 1);
           lineChart.data.labels.push(counter.toString());
@@ -153,9 +158,17 @@ const GyroscopeComponent = () => {
   }, [])
 
   return (
-    <div>
-      <canvas id="myChart" width={350} height={350}></canvas>
-    </div>
+        <Layout>
+            <div className="container-xxl">
+                <div className="fw-bold text-uppercase mb-8 text-center mt-4 fs-1">Gyroscope</div>
+              <div className="container text-center mt-4">
+                <canvas id="myChart" className="chart"></canvas>
+              </div>
+              <div className="container text-center mt-5">
+                    <Link to="/sensors/proximity" type="button" className="btn btn-outline-success mb-5 btn-lg" style={{ width: "150px", height: "50px" }}>Next</Link>
+                </div>
+            </div>
+        </Layout>
   )
 }
 
