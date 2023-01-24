@@ -123,3 +123,9 @@ video {
   height: 100%;
   object-fit: cover;
 }
+
+/* Stream page footer */
+.sensor-footer {
+  position: absolute;
+  bottom: 0;
+}

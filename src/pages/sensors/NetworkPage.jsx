@@ -25,7 +25,7 @@ const NetworkPage = () => {
     }, [isOnline]);
 
     return (
-        <Layout>
+        <Layout sensor={"Network"} status={{name: "network", status: isOnline ? true: false}}>
             <div className="container-xxl">
                 <div className="fw-bold text-uppercase mb-8 text-center mt-4 fs-1">Network</div>
                 {isOnline ? <Loader label={"Connected to the network"} passes={true}/> : <Loader label={"Not connected to the network"} passes={false}/> }

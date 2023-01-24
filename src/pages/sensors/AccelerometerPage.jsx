@@ -162,7 +162,7 @@ const AccelerometerPage = () => {
   }, [])
 
   return (
-    <Layout>
+    <Layout sensor={"Accelerometer"} status={{name: "accelerometer", status: accelerometerStat ? true: false}}>
       <div className="container-xxl">
         <div className="fw-bold text-uppercase mb-8 text-center mt-4 fs-1">Accelerometer</div>
         <div className="container text-center mt-4">

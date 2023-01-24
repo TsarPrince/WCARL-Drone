@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from "../../components/layout/Layout.component"
 import Loader from "../../components/Loader";
 import { checkSensors, checkMediaSupport } from "../../utils/check-sensors.js";
@@ -7,6 +7,7 @@ import {Link} from "react-router-dom";
 import { Chart, registerables } from 'chart.js';
 
 const GyroscopeComponent = () => {
+  const [gyroscopeStat, setGyroscopeStat] = useState(false)
 
   useEffect(() => {
 
@@ -144,6 +145,7 @@ const GyroscopeComponent = () => {
 
       };
       gyroscope.start();
+      setGyroscopeStat(true)
     } catch (error) {
       // Handle construction errors.
       if (error.name === 'SecurityError') {
@@ -158,7 +160,7 @@ const GyroscopeComponent = () => {
   }, [])
 
   return (
-        <Layout>
+        <Layout sensor={"Gyroscope"} status={{name: "gyroscope", status: gyroscopeStat ? true: false}}>
             <div className="container-xxl">
                 <div className="fw-bold text-uppercase mb-8 text-center mt-4 fs-1">Gyroscope</div>
               <div className="container text-center mt-4">

@@ -13,7 +13,7 @@ const CameraPage = () => {
         });
     },[])
     return (
-        <Layout>
+        <Layout sensor={"Camera"} status={{name: "camera", status: cameraStat ? true: false}}>
             <div className="container-xxl">
                 <div className="fw-bold text-uppercase mb-8 text-center mt-4 fs-1">Camera</div>
                 {!cameraStat ? <Loader label={"Checking for the Camera availability"} passes={false}/> : <Loader label={"Done"} passes={true}/> }
