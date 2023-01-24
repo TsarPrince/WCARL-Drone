@@ -21,6 +21,7 @@ const Layout = ({ children, sensor, status }) => {
 
   const updateStatus = ({name, status}) => {
     sensorStatus[name] = status
+    console.log(sensorStatus)
 
     setSensorStat((prev) => ({...prev, [name]: status}))
   }
@@ -29,7 +30,7 @@ const Layout = ({ children, sensor, status }) => {
     <> 
       <Navbar />
       {children}
-      {sensor && <Footer sensor={sensor} status={sensorStatus} />}
+      {sensor && <Footer sensor={sensor} status={sensorStatus} update={sensorStat} />}
     </>
   )
 }
