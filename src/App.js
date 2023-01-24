@@ -13,7 +13,7 @@ import NetworkPage from "./pages/sensors/NetworkPage"
 import ProximityPage from "./pages/sensors/ProximityPage"
 import StoragePage from "./pages/sensors/StoragePage"
 import Stream from "./pages/stream/index.page"
-import JoinStream from "./pages/stream/[USER_ID].page"
+import JoinStream from "./pages/stream/[ROOM_ID].page"
 
 const router = createBrowserRouter([
   {
