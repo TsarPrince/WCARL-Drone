@@ -8,7 +8,7 @@ const sensorStatus = {
   camera: false,
   gyroscope: false,
   network: false,
-  storage: false,
+  storage: true,
 }
 
 const Layout = ({ children, sensor, status }) => {
