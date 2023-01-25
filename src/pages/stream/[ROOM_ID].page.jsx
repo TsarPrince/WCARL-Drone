@@ -35,6 +35,8 @@ const JoinStream = () => {
     myVideo.muted = true
     const peers = {}
 
+    console.log({ ROOM_ID, droneDevice })
+
     // NORMAL USECASE
     if (ROOM_ID != DRONE_ROOM_ID || droneDevice) {
       navigator.mediaDevices.getUserMedia({
@@ -57,7 +59,6 @@ const JoinStream = () => {
         // whenever a new user joins
         socket.on('user-connected', userId => {
           console.log(`${userId} user-connected`)
-          console.log({ ROOM_ID, droneDevice })
           // call the new user
           connectToNewUser(userId, stream)
         })
