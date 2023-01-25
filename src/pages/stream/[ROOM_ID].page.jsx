@@ -43,7 +43,10 @@ const JoinStream = () => {
       // answer a call
       myPeer.on('call', call => {
         console.log('call received... answering')
-        call.answer(stream)
+
+        if (ROOM_ID != DRONE_ROOM_ID || droneDevice) {
+          call.answer(stream)
+        }
         const video = document.createElement('video')
         call.on('stream', userVideoStream => {
           console.log('receiving stream...')
@@ -55,10 +58,6 @@ const JoinStream = () => {
       socket.on('user-connected', userId => {
         console.log(`${userId} user-connected`)
         console.log({ ROOM_ID, droneDevice })
-        // ⚠️ if on DRONE_ROOM_ID
-        // ⚠️ only first device streaming from it
-        // ⚠️ will send it's stream (not all users)
-        if (ROOM_ID == DRONE_ROOM_ID && !droneDevice) return
 
         // call the new user
         connectToNewUser(userId, stream)
