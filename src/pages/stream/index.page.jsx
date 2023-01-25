@@ -24,7 +24,6 @@ const Stream = () => {
     } catch (err) {
       console.log(err)
     }
-    setDroneDevice(true)
     redirect(DRONE_ROOM_ID)
   }
 
