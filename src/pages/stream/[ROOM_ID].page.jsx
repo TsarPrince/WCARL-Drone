@@ -1,16 +1,35 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Peer } from "peerjs"
 import { io } from "socket.io-client"
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import Layout from "../../components/layout/Layout.component"
+
 
 const JoinStream = () => {
   const { ROOM_ID } = useParams()
-  console.log(useParams())
+  const [droneDevice, setDroneDevice] = useState(false)
+  const { SOCKET_URL, DRONE_ROOM_ID } = require('../../utils/constants')
+
 
   useEffect(() => {
+    if (ROOM_ID == DRONE_ROOM_ID) {
+      (async function () {
+        try {
+          const response = await fetch(`${SOCKET_URL}/clients?roomId=${DRONE_ROOM_ID}`)
+          const result = await response.json()
+          const deviceAlreadyStreaming = result.numOfClients !== 0
+          if (!deviceAlreadyStreaming) {
+            setDroneDevice(true)
+          }
+        } catch (err) {
+          console.log(err)
+        }
+      })()
+    }
+
     const myPeer = new Peer()
-    const socket = io('https://nice-stone-guitar.glitch.me/')
+    const socket = io(SOCKET_URL)
     const videoGrid = document.getElementById('video-grid')
     const myVideo = document.createElement('video')
     myVideo.muted = true
@@ -21,17 +40,27 @@ const JoinStream = () => {
       audio: true
     }).then(stream => {
       addVideoStream(myVideo, stream)
-
+      // answer a call
       myPeer.on('call', call => {
+        console.log('call received... answering')
         call.answer(stream)
         const video = document.createElement('video')
         call.on('stream', userVideoStream => {
+          console.log('receiving stream...')
           addVideoStream(video, userVideoStream)
         })
       })
 
+      // whenever a new user joins
       socket.on('user-connected', userId => {
         console.log(`${userId} user-connected`)
+        console.log({ ROOM_ID, droneDevice })
+        // ⚠️ if on DRONE_ROOM_ID
+        // ⚠️ only first device streaming from it
+        // ⚠️ will send it's stream (not all users)
+        if (ROOM_ID == DRONE_ROOM_ID && !droneDevice) return
+
+        // call the new user
         connectToNewUser(userId, stream)
       })
     })
@@ -41,11 +70,14 @@ const JoinStream = () => {
       if (peers[userId]) peers[userId].close()
     })
 
+    // on-connection
     myPeer.on('open', id => {
       socket.emit('join-room', ROOM_ID, id)
     })
 
     function connectToNewUser(userId, stream) {
+      // make a call
+      console.log('calling new user...')
       const call = myPeer.call(userId, stream)
       const video = document.createElement('video')
       call.on('stream', userVideoStream => {
@@ -70,9 +102,11 @@ const JoinStream = () => {
 
 
   return (
-    <div>
-      <div id="video-grid"></div>
-    </div>
+    <Layout>
+      <div className='container py-4'>
+        <div id='video-grid'></div>
+      </div>
+    </Layout>
   )
 }
 
