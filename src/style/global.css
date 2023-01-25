@@ -130,5 +130,10 @@ video {
   height: 100%;
   object-fit: cover;
   border-radius: 12px;
-  
+}
+
+/* Stream page footer */
+.sensor-footer {
+  position: absolute;
+  bottom: 0;
 }

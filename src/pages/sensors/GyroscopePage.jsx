@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from "../../components/layout/Layout.component"
 import Loader from "../../components/Loader";
 import { checkSensors, checkMediaSupport } from "../../utils/check-sensors.js";
@@ -7,6 +7,7 @@ import {Link} from "react-router-dom";
 import { Chart, registerables } from 'chart.js';
 
 const GyroscopeComponent = () => {
+  const [gyroscopeStat, setGyroscopeStat] = useState(false)
 
   useEffect(() => {
 
@@ -142,6 +143,7 @@ const GyroscopeComponent = () => {
         counter++;
         lineChart.update();
 
+        setGyroscopeStat(true)
       };
       gyroscope.start();
     } catch (error) {
@@ -158,16 +160,21 @@ const GyroscopeComponent = () => {
   }, [])
 
   return (
-        <Layout>
-            <div className="container-xxl">
+        <Layout sensor={"Gyroscope"} status={{name: "gyroscope", status: gyroscopeStat ? true: false}}>
+            <div className="container-xxl d-flex flex-column justify-content-center align-items-center">
                 <div className="fw-bold text-uppercase mb-8 text-center mt-4 fs-1">Gyroscope</div>
               <div className="container text-center mt-4">
                 <canvas id="myChart" className="chart"></canvas>
               </div>
-              <div className="container text-center mt-5">
-                    <Link to="/sensors/proximity" type="button" className="btn btn-outline-success mb-5 btn-lg" style={{ width: "150px", height: "50px" }}>Next</Link>
+              <div className="btn-group flex-column flex-md-row m-auto">
+                <div className="container text-center mt-5">
+                      <Link to="/" type="button" className="btn btn-outline-success mb-5 btn-lg" style={{ width: "150px", height: "50px" }}>Home</Link>
+                </div>
+                <div className="container text-center mt-5">
+                      <Link to="/stream" type="button" className="btn btn-outline-success mb-5 btn-lg" style={{ width: "150px", height: "50px" }}>Stream</Link>
                 </div>
             </div>
+              </div>
         </Layout>
   )
 }
