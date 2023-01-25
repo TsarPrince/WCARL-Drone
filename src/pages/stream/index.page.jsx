@@ -53,7 +53,6 @@ const Stream = () => {
     if (!ROOM_ID) {
       ROOM_ID = uuidV4()
     }
-    console.log(droneDevice)
     navigate(`/stream/${ROOM_ID}`)
   }
 
