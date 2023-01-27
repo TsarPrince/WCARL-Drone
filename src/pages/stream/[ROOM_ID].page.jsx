@@ -65,7 +65,7 @@ const JoinStream = () => {
           })
         })
       } else {
-        // SPECIAL USECASE FOR DRONE ROOM ID
+        // SPECIAL USECASE FOR NON DRONE DEVICES IN DRONE_ROOM_ID
         myPeer.on('call', call => {
           console.log('call received... answering')
           call.answer()
@@ -80,8 +80,8 @@ const JoinStream = () => {
         socket.on('user-connected', userId => {
           console.log(`${userId} user-connected`)
           console.log({ ROOM_ID, droneDevice })
-          // call the new user
-          connectToNewUser(userId, stream)
+          // DON'T call the new user
+          // connectToNewUser(userId, stream)
         })
 
       }
