@@ -5,12 +5,15 @@ import Layout from "../../components/layout/Layout.component"
 
 const Stream = () => {
   const { DRONE_ROOM_ID, SOCKET_URL } = require('../../utils/constants')
+  const [joining, setJoining] = useState(false)
+  const [streaming, setStreaming] = useState(false)
 
   const navigate = useNavigate();
   const [customRoomID, setCustomRoomID] = useState()
 
   const startStreaming = async (e) => {
     e.preventDefault()
+    setStreaming(true)
 
     // don't start stream if a device is already streaming at DRONE_ROOM_ID
     try {
@@ -19,16 +22,19 @@ const Stream = () => {
       const deviceAlreadyStreaming = result.numOfClients !== 0
       if (deviceAlreadyStreaming) {
         alert('A device is already streaming!')
+        setStreaming(false)
         return
       }
     } catch (err) {
       console.log(err)
     }
+    setStreaming(false)
     redirect(DRONE_ROOM_ID)
   }
 
   const joinStream = async (e) => {
     e.preventDefault()
+    setJoining(true)
 
     // if trying to join DRONE_ROOM_ID stream
     // don't join if no device is already streaming
@@ -39,12 +45,14 @@ const Stream = () => {
         const deviceAlreadyStreaming = result.numOfClients !== 0
         if (!deviceAlreadyStreaming) {
           alert(`No device is currently streaming at ${DRONE_ROOM_ID} Room`)
+          setJoining(false)
           return
         }
       } catch (err) {
         console.log(err)
       }
     }
+    setJoining(false)
     redirect(customRoomID)
   }
 
@@ -69,7 +77,12 @@ const Stream = () => {
               <input type="text" className="form-control" id="room-id-join" aria-describedby="basic-addon3" required onChange={(e) => setCustomRoomID(e.target.value)} />
             </div>
           </div>
-          <button id="join-stream" type="submit" className="btn btn-primary">Join Stream</button>
+          <button id="join-stream" type="submit" className="btn btn-primary d-flex align-items-center" disabled={joining}>
+            <span>Join Stream</span>
+            {joining && <div className="spinner-border text-light" role="status" style={{ marginLeft: '8px' }}>
+              <span className="sr-only">Loading...</span>
+            </div>}
+          </button>
         </form>
 
         <form className='form py-4' onSubmit={(e) => { startStreaming(e) }}>
@@ -81,7 +94,12 @@ const Stream = () => {
               <input type="text" className="form-control" disabled id="room-id-stream" aria-describedby="basic-addon3" value={DRONE_ROOM_ID} />
             </div>
           </div>
-          <button id="start-stream" type="submit" className="btn btn-outline-primary">Start Streaming</button>
+          <button id="start-stream" type="submit" className="btn btn-outline-primary d-flex align-items-center" disabled={streaming}>
+            <span>Start Streaming</span>
+            {streaming && <div className="spinner-border text-primary" role="status" style={{ marginLeft: '8px' }}>
+              <span className="sr-only">Loading...</span>
+            </div>}
+          </button>
         </form>
 
       </div>

@@ -8,47 +8,67 @@ import Layout from "../../components/layout/Layout.component"
 
 const JoinStream = () => {
   const { ROOM_ID } = useParams()
-  const [droneDevice, setDroneDevice] = useState(false)
   const { SOCKET_URL, DRONE_ROOM_ID } = require('../../utils/constants')
 
 
   useEffect(() => {
-    if (ROOM_ID == DRONE_ROOM_ID) {
-      (async function () {
+    (async () => {
+      let droneDevice = false
+      if (ROOM_ID == DRONE_ROOM_ID) {
         try {
+          console.log('checking for drone device...')
           const response = await fetch(`${SOCKET_URL}/clients?roomId=${DRONE_ROOM_ID}`)
           const result = await response.json()
+          console.log(result)
           const deviceAlreadyStreaming = result.numOfClients !== 0
           if (!deviceAlreadyStreaming) {
-            setDroneDevice(true)
+            droneDevice = true
           }
         } catch (err) {
           console.log(err)
         }
-      })()
-    }
+      }
 
-    const myPeer = new Peer()
-    const socket = io(SOCKET_URL)
-    const videoGrid = document.getElementById('video-grid')
-    const myVideo = document.createElement('video')
-    myVideo.muted = true
-    const peers = {}
+      const myPeer = new Peer()
+      const socket = io(SOCKET_URL)
+      const videoGrid = document.getElementById('video-grid')
+      const myVideo = document.createElement('video')
+      myVideo.muted = true
+      const peers = {}
 
-    console.log({ ROOM_ID, droneDevice })
+      console.log({ ROOM_ID, droneDevice })
 
-    // NORMAL USECASE
-    if (ROOM_ID != DRONE_ROOM_ID || droneDevice) {
-      navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true
-      }).then(stream => {
-        addVideoStream(myVideo, stream)
-        // answer a call
+      // NORMAL USECASE
+      if (ROOM_ID != DRONE_ROOM_ID || droneDevice) {
+        navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true
+        }).then(stream => {
+          addVideoStream(myVideo, stream)
+          // answer a call
+          myPeer.on('call', call => {
+            console.log('call received... answering')
+
+            call.answer(stream)
+            const video = document.createElement('video')
+            call.on('stream', userVideoStream => {
+              console.log('receiving stream...')
+              addVideoStream(video, userVideoStream)
+            })
+          })
+
+          // whenever a new user joins
+          socket.on('user-connected', userId => {
+            console.log(`${userId} user-connected`)
+            // call the new user
+            connectToNewUser(userId, stream)
+          })
+        })
+      } else {
+        // SPECIAL USECASE FOR DRONE ROOM ID
         myPeer.on('call', call => {
           console.log('call received... answering')
-
-          call.answer(stream)
+          call.answer()
           const video = document.createElement('video')
           call.on('stream', userVideoStream => {
             console.log('receiving stream...')
@@ -59,65 +79,47 @@ const JoinStream = () => {
         // whenever a new user joins
         socket.on('user-connected', userId => {
           console.log(`${userId} user-connected`)
+          console.log({ ROOM_ID, droneDevice })
           // call the new user
           connectToNewUser(userId, stream)
         })
+
+      }
+
+      socket.on('user-disconnected', userId => {
+        console.log(`${userId} user-disconnected`)
+        if (peers[userId]) peers[userId].close()
       })
-    } else {
-      // ABNORMAL USECASE
-      myPeer.on('call', call => {
-        console.log('call received... answering')
-        call.answer()
+
+      // on-connection
+      myPeer.on('open', id => {
+        socket.emit('join-room', ROOM_ID, id)
+      })
+
+
+      function connectToNewUser(userId, stream) {
+        // make a call
+        console.log('calling new user...')
+        const call = myPeer.call(userId, stream)
         const video = document.createElement('video')
         call.on('stream', userVideoStream => {
-          console.log('receiving stream...')
           addVideoStream(video, userVideoStream)
         })
-      })
+        call.on('close', () => {
+          video.remove()
+        })
 
-      // whenever a new user joins
-      socket.on('user-connected', userId => {
-        console.log(`${userId} user-connected`)
-        console.log({ ROOM_ID, droneDevice })
-        // call the new user
-        connectToNewUser(userId, stream)
-      })
+        peers[userId] = call
+      }
 
-    }
-
-    socket.on('user-disconnected', userId => {
-      console.log(`${userId} user-disconnected`)
-      if (peers[userId]) peers[userId].close()
-    })
-
-    // on-connection
-    myPeer.on('open', id => {
-      socket.emit('join-room', ROOM_ID, id)
-    })
-
-    function connectToNewUser(userId, stream) {
-      // make a call
-      console.log('calling new user...')
-      const call = myPeer.call(userId, stream)
-      const video = document.createElement('video')
-      call.on('stream', userVideoStream => {
-        addVideoStream(video, userVideoStream)
-      })
-      call.on('close', () => {
-        video.remove()
-      })
-
-      peers[userId] = call
-    }
-
-    function addVideoStream(video, stream) {
-      video.srcObject = stream
-      video.addEventListener('loadedmetadata', () => {
-        video.play()
-      })
-      videoGrid.append(video)
-    }
-
+      function addVideoStream(video, stream) {
+        video.srcObject = stream
+        video.addEventListener('loadedmetadata', () => {
+          video.play()
+        })
+        videoGrid.append(video)
+      }
+    })()
   }, [])
 
 
