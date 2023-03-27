@@ -84,7 +84,14 @@ const CheckmyDevicePage = () => {
               </h1>
             </div>
             <div className="container text-center">
-              <Link to="/sensors/camera" type="button" className="btn btn-outline-primary mb-5 btn-lg" style={{width: "150px", height: "50px"}}>Start</Link>
+              <Link
+                to="/sensors/camera"
+                type="button"
+                className="btn btn-outline-primary mb-5 btn-lg"
+                style={{ width: "150px", height: "50px" }}
+              >
+                Start
+              </Link>
             </div>
             {/*<div className="row g-4">*/}
             {/*  {sensors.map((sensor) => (*/}

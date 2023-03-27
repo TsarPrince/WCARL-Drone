@@ -15,19 +15,18 @@ const Layout = ({ children, sensor, status }) => {
   const [sensorStat, setSensorStat] = React.useState()
 
   React.useEffect(() => {
-    if(status && status.name && status.status)
-      updateStatus(status)
+    if (status && status.name && status.status) updateStatus(status)
   }, [status])
 
-  const updateStatus = ({name, status}) => {
+  const updateStatus = ({ name, status }) => {
     sensorStatus[name] = status
     console.log(sensorStatus)
 
-    setSensorStat((prev) => ({...prev, [name]: status}))
+    setSensorStat((prev) => ({ ...prev, [name]: status }))
   }
 
   return (
-    <> 
+    <>
       <Navbar />
       {children}
       {sensor && <Footer sensor={sensor} status={sensorStatus} update={sensorStat} />}
