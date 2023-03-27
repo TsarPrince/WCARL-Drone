@@ -5,13 +5,12 @@ import { useEffect } from "react"
 import { useParams } from "react-router-dom"
 import Layout from "../../components/layout/Layout.component"
 
-const chunks = []
+let chunks = []
 
 const JoinStream = () => {
   const { ROOM_ID } = useParams()
   const { SOCKET_URL, DRONE_ROOM_ID } = require("../../utils/constants")
 
-  const [recording, setRecording] = useState([])
   const [recorder, setRecorder] = useState(null)
   const [stream, setStream] = useState(null)
   const [isRecording, setIsRecording] = useState(false)
@@ -33,11 +32,7 @@ const JoinStream = () => {
       const mediaRecorder = new MediaRecorder(stream)
 
       mediaRecorder.ondataavailable = (event) => {
-        console.log(event.data)
         chunks.push(event.data)
-        setRecording((store) => [...store, event.data])
-        console.log(recording)
-        console.log(chunks)
       }
 
       mediaRecorder.onstart = (e) => {
@@ -55,13 +50,16 @@ const JoinStream = () => {
   }
 
   const handleEnd = () => {
-    if (recorder && recorder.state === "recording") recorder.stop()
+    if (recorder && recorder.state === "recording") {
+      recorder.stop()
+      setIsRecording(false)
+    }
   }
 
   useEffect(() => {
-    let mediaRecorder = null
-
-    ;(async () => {
+    let mediaRecorder = null;
+    
+    (async () => {
       let droneDevice = false
       if (ROOM_ID == DRONE_ROOM_ID) {
         try {
@@ -99,8 +97,6 @@ const JoinStream = () => {
             setStream(stream)
 
             console.log(mediaRecorder)
-            // Create a new MediaStream
-            const newStream = new MediaStream()
 
             // answer a call
             myPeer.on("call", (call) => {
@@ -182,7 +178,7 @@ const JoinStream = () => {
     <Layout>
       <div className="container py-4">
         <div id="video-grid"></div>
-        <button onClick={isRecording ? handleEnd : handleStart}>
+        <button className="btn btn-primary mt-3" onClick={isRecording ? handleEnd : handleStart}>
           {isRecording ? "End" : "Start"} Recording
         </button>
       </div>
