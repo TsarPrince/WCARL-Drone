@@ -15,7 +15,7 @@ const JoinStream = () => {
   const [stream, setStream] = useState(null)
   const [isRecording, setIsRecording] = useState(false)
 
-  const createFileFormCurrentRecordedData = (event) => {
+  const createFileFormCurrentRecordedData = async (event) => {
     const blob = new Blob(chunks, { type: "video/mp4" })
     const file = new File([blob], "drone.mp4", { type: "video/mp4" })
     console.log(file)
@@ -25,6 +25,18 @@ const JoinStream = () => {
     a.download = "drone.mp4"
 
     a.click()
+
+    try {
+      const formData = new FormData();
+      formData.append('video', file);
+      const reponse = await fetch(`${SOCKET_URL}/upload`, {
+        method: 'POST',
+        body: formData,
+      }); // upload to server
+      console.log(reponse)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   useEffect(() => {
@@ -58,7 +70,7 @@ const JoinStream = () => {
 
   useEffect(() => {
     let mediaRecorder = null;
-    
+
     (async () => {
       let droneDevice = false
       if (ROOM_ID == DRONE_ROOM_ID) {
