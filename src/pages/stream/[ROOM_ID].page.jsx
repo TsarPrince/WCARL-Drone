@@ -21,18 +21,19 @@ const JoinStream = () => {
     console.log(file)
     const url = URL.createObjectURL(file)
     const a = document.createElement("a")
+    chunks = []
     a.href = url
     a.download = "drone.mp4"
 
     a.click()
 
     try {
-      const formData = new FormData();
-      formData.append('video', file);
+      const formData = new FormData()
+      formData.append("video", file)
       const reponse = await fetch(`${SOCKET_URL}/upload`, {
-        method: 'POST',
+        method: "POST",
         body: formData,
-      }); // upload to server
+      }) // upload to server
       console.log(reponse)
     } catch (err) {
       console.log(err)
@@ -69,9 +70,9 @@ const JoinStream = () => {
   }
 
   useEffect(() => {
-    let mediaRecorder = null;
+    let mediaRecorder = null
 
-    (async () => {
+    ;(async () => {
       let droneDevice = false
       if (ROOM_ID == DRONE_ROOM_ID) {
         try {
